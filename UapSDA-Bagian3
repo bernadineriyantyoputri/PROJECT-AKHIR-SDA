@@ -1,0 +1,46 @@
+        elif pilihan == '4':
+            id_lagu = input("Masukkan ID Lagu yang akan dihapus: ")
+            if hapus_lagu(daftar_lagu, id_lagu):
+                print("Lagu berhasil dihapus!")
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '5':
+            id_lagu = input("Masukkan ID Lagu: ")
+            lagu = cari_lagu_berdasarkan_id(daftar_lagu, id_lagu)
+            if lagu:
+                print(lagu)
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '6':
+            judul = input("Masukkan Judul Lagu: ")
+            hasil_pencarian = cari_lagu_berdasarkan_judul(daftar_lagu, judul)
+            if hasil_pencarian:
+                print("Hasil Pencarian:")
+                for lagu in hasil_pencarian:
+                    print(lagu)
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '7':
+            daftar_lagu = urutkan_lagu_berdasarkan_judul(daftar_lagu)
+            print("Daftar lagu berhasil diurutkan berdasarkan judul!")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '8':
+            daftar_lagu = urutkan_lagu_berdasarkan_tahun_rilis(daftar_lagu)
+            print("Daftar lagu berhasil diurutkan berdasarkan tahun rilis!")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '9':
+            print("Terima kasih telah menggunakan sistem manajemen koleksi musik!")
+            break
+
+        else:
+            print("Opsi tidak valid! Silakan pilih lagi.")
+
+        input("\nTekan Enter untuk kembali ke menu...")
+
+if name == "main":
+    main()
