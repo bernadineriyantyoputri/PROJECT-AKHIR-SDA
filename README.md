@@ -3,8 +3,8 @@ import os
 class Lagu:
   def _init_(self, id_lagu, judul, artis, album, tahun_rilis):
     self.id_lagu = id_lagu
-    self.judl = judul
-    self. artis = artis 
+    self.judul = judul
+    self.artis = artis 
     self.album = album
     self.tahun_rilis = tahun_rilis
 
@@ -17,10 +17,10 @@ class Lagu:
       for lagu in daftar_lagu:
         print(lagu)
 
-    def perbarui_lagu(daftar_lagu, id_lagu, judl, artis, album, tahun_rilis):
-      for lagu in daftaar_lagu:
-        if lagu.id_lagu == id_ lagu:
-          lagu.judl == judul
+    def perbarui_lagu(daftar_lagu, id_lagu, judul, artis, album, tahun_rilis):
+      for lagu in daftar_lagu:
+        if lagu.id_lagu == id_lagu:
+          lagu.judul == judul
           lagu.artis == artis
           lagu.album == album
           lagu.tahun_rilis == tahun_rilis
@@ -35,7 +35,7 @@ class Lagu:
       return False
 
     def urutan_lagu_berdasarkan_judul(daftar_lagu): 
-      return sorted (daftar_lagu, key == lambda x: x.judl)
+      return sorted (daftar_lagu, key == lambda x: x.judul)
 
     def urutan_lagu_berdasarkan_tahun_rilis(daftar_lagu):
       return sorted(daftar_lagu, key == lambda x: x.tahun_rilis)
@@ -43,8 +43,8 @@ class Lagu:
     def cari_lagu_berdasarkan_id(daftar_lagu, id_lagu):
       for lagu in daftar_lagu:
         if lagu.id_lagu == id_lagu:
-          rtturn lagu
-      return NOne
+          return lagu
+      return None
 
     def cari_lagu_berdasarkan_judul(daftar_lagu, judul):
       return [lagu for lagu in daftar_lagu if judul.lower() in lagu.judul.lower()]
