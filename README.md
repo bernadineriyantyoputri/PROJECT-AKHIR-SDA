@@ -10,6 +10,7 @@ class Lagu:
 
   def _str_(self):
     return f'ID : {self.id_lagu}, Judul: {self.judul}, Artis: {self.artis}, Album: {self.album}, Tahun Rilis: {self.tahun_rilis}'
+    
     def tambah_lagu(daftar_lagu, lagu}:
       daftar_lagu.append(lagu)
       
