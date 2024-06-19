@@ -1,0 +1,51 @@
+def menu():
+    print("\nSistem Manajemen Koleksi Musik")
+    print("1. Tambah Lagu")
+    print("2. Tampilkan Semua Lagu")
+    print("3. Perbarui Lagu")
+    print("4. Hapus Lagu")
+    print("5. Cari Lagu Berdasarkan ID")
+    print("6. Cari Lagu Berdasarkan Judul")
+    print("7. Urutkan Lagu Berdasarkan Judul")
+    print("8. Urutkan Lagu Berdasarkan Tahun Rilis")
+    print("9. Keluar")
+
+def bersihkan_layar():
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # MacOS atau Linux
+        os.system('clear')
+
+def main():
+    daftar_lagu = []
+
+    while True:
+        bersihkan_layar()
+        menu()
+        pilihan = input("Pilih opsi: ")
+        bersihkan_layar()
+
+        if pilihan == '1':
+            id_lagu = input("Masukkan ID Lagu: ")
+            judul = input("Masukkan Judul Lagu: ")
+            artis = input("Masukkan Artis: ")
+            album = input("Masukkan Album: ")
+            tahun_rilis = input("Masukkan Tahun Rilis: ")
+            lagu = Lagu(id_lagu, judul, artis, album, tahun_rilis)
+            tambah_lagu(daftar_lagu, lagu)
+            print("Lagu berhasil ditambahkan!")
+
+        elif pilihan == '2':
+            print("Daftar Lagu:")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '3':
+            id_lagu = input("Masukkan ID Lagu yang akan diperbarui: ")
+            judul = input("Masukkan Judul Lagu Baru: ")
+            artis = input("Masukkan Artis Baru: ")
+            album = input("Masukkan Album Baru: ")
+            tahun_rilis = input("Masukkan Tahun Rilis Baru: ")
+            if perbarui_lagu(daftar_lagu, id_lagu, judul, artis, album, tahun_rilis):
+                print("Lagu berhasil diperbarui!")
+            else:
+                print("Lagu tidak ditemukan!")
