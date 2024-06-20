@@ -1,4 +1,6 @@
-import os
+import csv
+import tkinter as tk
+from tkinter import messagebox
 
 class Lagu:
     def __init__(self, id_lagu, judul, artis, album, tahun_rilis):
@@ -13,6 +15,7 @@ class Lagu:
 
 def tambah_lagu(daftar_lagu, lagu):
     daftar_lagu.append(lagu)
+    return daftar_lagu
 
 def tampilkan_lagu(daftar_lagu):
     for lagu in daftar_lagu:
@@ -50,103 +53,102 @@ def cari_lagu_berdasarkan_id(daftar_lagu, id_lagu):
 def cari_lagu_berdasarkan_judul(daftar_lagu, judul):
     return [lagu for lagu in daftar_lagu if judul.lower() in lagu.judul.lower()]
 
-def menu():
-    print("\nSistem Manajemen Koleksi Musik")
-    print("1. Tambah Lagu")
-    print("2. Tampilkan Semua Lagu")
-    print("3. Perbarui Lagu")
-    print("4. Hapus Lagu")
-    print("5. Cari Lagu Berdasarkan ID")
-    print("6. Cari Lagu Berdasarkan Judul")
-    print("7. Urutkan Lagu Berdasarkan Judul")
-    print("8. Urutkan Lagu Berdasarkan Tahun Rilis")
-    print("9. Keluar")
+def simpan_ke_csv(daftar_lagu, file_path):
+    with open(file_path, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(['ID Lagu', 'Judul', 'Artis', 'Album', 'Tahun Rilis'])
+        for lagu in daftar_lagu:
+            writer.writerow([lagu.id_lagu, lagu.judul, lagu.artis, lagu.album, lagu.tahun_rilis])
 
-def bersihkan_layar():
-    if os.name == 'nt':  # Windows
-        os.system('cls')
-    else:  # MacOS atau Linux
-        os.system('clear')
-
-def main():
+def baca_dari_csv(file_path):
     daftar_lagu = []
+    try:
+        with open(file_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.reader(file)
+            next(reader)  # skip header
+            for row in reader:
+                id_lagu, judul, artis, album, tahun_rilis = row
+                lagu = Lagu(id_lagu, judul, artis, album, tahun_rilis)
+                daftar_lagu.append(lagu)
+    except FileNotFoundError:
+        pass  # Jika file tidak ditemukan, biarkan daftar_lagu tetap kosong
+    return daftar_lagu
 
-    while True:
-        bersihkan_layar()
-        menu()
-        pilihan = input("Pilih opsi: ")
-        bersihkan_layar()
-
-        if pilihan == '1':
-            id_lagu = input("Masukkan ID Lagu: ")
-            judul = input("Masukkan Judul Lagu: ")
-            artis = input("Masukkan Artis: ")
-            album = input("Masukkan Album: ")
-            tahun_rilis = input("Masukkan Tahun Rilis: ")
-            lagu = Lagu(id_lagu, judul, artis, album, tahun_rilis)
-            tambah_lagu(daftar_lagu, lagu)
-            print("Lagu berhasil ditambahkan!")
-
-        elif pilihan == '2':
-            print("Daftar Lagu:")
-            tampilkan_lagu(daftar_lagu)
-
-        elif pilihan == '3':
-            id_lagu = input("Masukkan ID Lagu yang akan diperbarui: ")
-            judul = input("Masukkan Judul Lagu Baru: ")
-            artis = input("Masukkan Artis Baru: ")
-            album = input("Masukkan Album Baru: ")
-            tahun_rilis = input("Masukkan Tahun Rilis Baru: ")
-            if perbarui_lagu(daftar_lagu, id_lagu, judul, artis, album, tahun_rilis):
-                print("Lagu berhasil diperbarui!")
-            else:
-                print("Lagu tidak ditemukan!")
-
-        elif pilihan == '4':
-            id_lagu = input("Masukkan ID Lagu yang akan dihapus: ")
-            if hapus_lagu(daftar_lagu, id_lagu):
-                print("Lagu berhasil dihapus!")
-            else:
-                print("Lagu tidak ditemukan!")
-
-        elif pilihan == '5':
-            id_lagu = input("Masukkan ID Lagu: ")
-            lagu = cari_lagu_berdasarkan_id(daftar_lagu, id_lagu)
-            if lagu:
-                print(lagu)
-            else:
-                print("Lagu tidak ditemukan!")
-
-        elif pilihan == '6':
-            judul = input("Masukkan Judul Lagu: ")
-            hasil_pencarian = cari_lagu_berdasarkan_judul(daftar_lagu, judul)
-            if hasil_pencarian:
-                print("Hasil Pencarian:")
-                for lagu in hasil_pencarian:
-                    print(lagu)
-            else:
-                print("Lagu tidak ditemukan!")
-
-        elif pilihan == '7':
-            daftar_lagu = urutkan_lagu_berdasarkan_judul(daftar_lagu)
-            print("Daftar lagu berhasil diurutkan berdasarkan judul!")
-            tampilkan_lagu(daftar_lagu)
-
-        elif pilihan == '8':
-            daftar_lagu = urutkan_lagu_berdasarkan_tahun_rilis(daftar_lagu)
-            print("Daftar lagu berhasil diurutkan berdasarkan tahun rilis!")
-            tampilkan_lagu(daftar_lagu)
-
-        elif pilihan == '9':
-            print("Terima kasih telah menggunakan sistem manajemen koleksi musik!")
-            break
-
-        else:
+def tambah_lagu_gui():
+    def tambah():
+        id_lagu = entry_id.get()
+        judul = entry_judul.get()
+        artis = entry_artis.get()
+        album = entry_album.get()
+        tahun_rilis = entry_tahun_rilis.get()
         
-            print("Opsi tidak valid! Silakan pilih lagi.")
+        if id_lagu and judul and artis and album and tahun_rilis:
+            lagu_baru = Lagu(id_lagu, judul, artis, album, tahun_rilis)
+            daftar_lagu.append(lagu_baru)
+            simpan_ke_csv(daftar_lagu, file_path)
+            messagebox.showinfo("Sukses", "Lagu berhasil ditambahkan!")
+        else:
+            messagebox.showerror("Error", "Semua field harus diisi!")
 
-        input("\nTekan Enter untuk kembali ke menu...")
+    window_tambah = tk.Toplevel(main_window)
+    window_tambah.title("Tambah Lagu")
+
+    label_id = tk.Label(window_tambah, text="ID Lagu:")
+    label_id.grid(row=0, column=0, padx=10, pady=5)
+    entry_id = tk.Entry(window_tambah)
+    entry_id.grid(row=0, column=1, padx=10, pady=5)
+
+    label_judul = tk.Label(window_tambah, text="Judul:")
+    label_judul.grid(row=1, column=0, padx=10, pady=5)
+    entry_judul = tk.Entry(window_tambah)
+    entry_judul.grid(row=1, column=1, padx=10, pady=5)
+
+    label_artis = tk.Label(window_tambah, text="Artis:")
+    label_artis.grid(row=2, column=0, padx=10, pady=5)
+    entry_artis = tk.Entry(window_tambah)
+    entry_artis.grid(row=2, column=1, padx=10, pady=5)
+
+    label_album = tk.Label(window_tambah, text="Album:")
+    label_album.grid(row=3, column=0, padx=10, pady=5)
+    entry_album = tk.Entry(window_tambah)
+    entry_album.grid(row=3, column=1, padx=10, pady=5)
+
+    label_tahun_rilis = tk.Label(window_tambah, text="Tahun Rilis:")
+    label_tahun_rilis.grid(row=4, column=0, padx=10, pady=5)
+    entry_tahun_rilis = tk.Entry(window_tambah)
+    entry_tahun_rilis.grid(row=4, column=1, padx=10, pady=5)
+
+    button_simpan = tk.Button(window_tambah, text="Simpan Lagu", command=tambah)
+    button_simpan.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
+
+def tampilkan_lagu_gui():
+    window_tampilkan = tk.Toplevel(main_window)
+    window_tampilkan.title("Tampilkan Lagu")
+
+    for i, lagu in enumerate(daftar_lagu):
+        label_lagu = tk.Label(window_tampilkan, text=str(lagu))
+        label_lagu.grid(row=i, column=0, padx=10, pady=5)
+
+def main_menu():
+    global main_window
+    main_window = tk.Tk()
+    main_window.title("Aplikasi Manajemen Lagu")
+
+    frame = tk.Frame(main_window)
+    frame.pack(padx=20, pady=20)
+
+    button_tambah = tk.Button(frame, text="Tambah Lagu", command=tambah_lagu_gui)
+    button_tambah.pack(padx=10, pady=5)
+
+    button_tampilkan = tk.Button(frame, text="Tampilkan Lagu", command=tampilkan_lagu_gui)
+    button_tampilkan.pack(padx=10, pady=5)
+
+    button_keluar = tk.Button(frame, text="Keluar", command=main_window.quit)
+    button_keluar.pack(padx=10, pady=5)
+
+    main_window.mainloop()
 
 if __name__ == "__main__":
-    main()
-
+    file_path = 'daftar_lagu.csv'
+    daftar_lagu = baca_dari_csv(file_path)
+    main_menu()
