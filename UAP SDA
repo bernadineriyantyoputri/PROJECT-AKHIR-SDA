@@ -1,1 +1,152 @@
+import os
+
+class Lagu:
+    def __init__(self, id_lagu, judul, artis, album, tahun_rilis):
+        self.id_lagu = id_lagu
+        self.judul = judul
+        self.artis = artis
+        self.album = album
+        self.tahun_rilis = tahun_rilis
+
+    def __str__(self):
+        return f'ID: {self.id_lagu}, Judul: {self.judul}, Artis: {self.artis}, Album: {self.album}, Tahun Rilis: {self.tahun_rilis}'
+
+def tambah_lagu(daftar_lagu, lagu):
+    daftar_lagu.append(lagu)
+
+def tampilkan_lagu(daftar_lagu):
+    for lagu in daftar_lagu:
+        print(lagu)
+
+def perbarui_lagu(daftar_lagu, id_lagu, judul, artis, album, tahun_rilis):
+    for lagu in daftar_lagu:
+        if lagu.id_lagu == id_lagu:
+            lagu.judul = judul
+            lagu.artis = artis
+            lagu.album = album
+            lagu.tahun_rilis = tahun_rilis
+            return True
+    return False
+
+def hapus_lagu(daftar_lagu, id_lagu):
+    for lagu in daftar_lagu:
+        if lagu.id_lagu == id_lagu:
+            daftar_lagu.remove(lagu)
+            return True
+    return False
+
+def urutkan_lagu_berdasarkan_judul(daftar_lagu):
+    return sorted(daftar_lagu, key=lambda x: x.judul)
+
+def urutkan_lagu_berdasarkan_tahun_rilis(daftar_lagu):
+    return sorted(daftar_lagu, key=lambda x: x.tahun_rilis)
+
+def cari_lagu_berdasarkan_id(daftar_lagu, id_lagu):
+    for lagu in daftar_lagu:
+        if lagu.id_lagu == id_lagu:
+            return lagu
+    return None
+
+def cari_lagu_berdasarkan_judul(daftar_lagu, judul):
+    return [lagu for lagu in daftar_lagu if judul.lower() in lagu.judul.lower()]
+
+def menu():
+    print("\nSistem Manajemen Koleksi Musik")
+    print("1. Tambah Lagu")
+    print("2. Tampilkan Semua Lagu")
+    print("3. Perbarui Lagu")
+    print("4. Hapus Lagu")
+    print("5. Cari Lagu Berdasarkan ID")
+    print("6. Cari Lagu Berdasarkan Judul")
+    print("7. Urutkan Lagu Berdasarkan Judul")
+    print("8. Urutkan Lagu Berdasarkan Tahun Rilis")
+    print("9. Keluar")
+
+def bersihkan_layar():
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # MacOS atau Linux
+        os.system('clear')
+
+def main():
+    daftar_lagu = []
+
+    while True:
+        bersihkan_layar()
+        menu()
+        pilihan = input("Pilih opsi: ")
+        bersihkan_layar()
+
+        if pilihan == '1':
+            id_lagu = input("Masukkan ID Lagu: ")
+            judul = input("Masukkan Judul Lagu: ")
+            artis = input("Masukkan Artis: ")
+            album = input("Masukkan Album: ")
+            tahun_rilis = input("Masukkan Tahun Rilis: ")
+            lagu = Lagu(id_lagu, judul, artis, album, tahun_rilis)
+            tambah_lagu(daftar_lagu, lagu)
+            print("Lagu berhasil ditambahkan!")
+
+        elif pilihan == '2':
+            print("Daftar Lagu:")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '3':
+            id_lagu = input("Masukkan ID Lagu yang akan diperbarui: ")
+            judul = input("Masukkan Judul Lagu Baru: ")
+            artis = input("Masukkan Artis Baru: ")
+            album = input("Masukkan Album Baru: ")
+            tahun_rilis = input("Masukkan Tahun Rilis Baru: ")
+            if perbarui_lagu(daftar_lagu, id_lagu, judul, artis, album, tahun_rilis):
+                print("Lagu berhasil diperbarui!")
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '4':
+            id_lagu = input("Masukkan ID Lagu yang akan dihapus: ")
+            if hapus_lagu(daftar_lagu, id_lagu):
+                print("Lagu berhasil dihapus!")
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '5':
+            id_lagu = input("Masukkan ID Lagu: ")
+            lagu = cari_lagu_berdasarkan_id(daftar_lagu, id_lagu)
+            if lagu:
+                print(lagu)
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '6':
+            judul = input("Masukkan Judul Lagu: ")
+            hasil_pencarian = cari_lagu_berdasarkan_judul(daftar_lagu, judul)
+            if hasil_pencarian:
+                print("Hasil Pencarian:")
+                for lagu in hasil_pencarian:
+                    print(lagu)
+            else:
+                print("Lagu tidak ditemukan!")
+
+        elif pilihan == '7':
+            daftar_lagu = urutkan_lagu_berdasarkan_judul(daftar_lagu)
+            print("Daftar lagu berhasil diurutkan berdasarkan judul!")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '8':
+            daftar_lagu = urutkan_lagu_berdasarkan_tahun_rilis(daftar_lagu)
+            print("Daftar lagu berhasil diurutkan berdasarkan tahun rilis!")
+            tampilkan_lagu(daftar_lagu)
+
+        elif pilihan == '9':
+            print("Terima kasih telah menggunakan sistem manajemen koleksi musik!")
+            break
+
+        else:
+        
+            print("Opsi tidak valid! Silakan pilih lagi.")
+
+        input("\nTekan Enter untuk kembali ke menu...")
+
+if __name__ == "__main__":
+    main()
 
